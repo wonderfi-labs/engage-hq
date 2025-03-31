@@ -1,5 +1,4 @@
 // utils.test.ts
-import { beforeEach, describe, expect, test, vi } from "vitest";
 import { mockProjectId, mockSurveyId } from "@/lib/common/tests/__mocks__/config.mock";
 import {
   diffInDays,
@@ -17,6 +16,7 @@ import type {
   TSurveyStyling,
   TUserState,
 } from "@/types/config";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 const mockSurveyId1 = "e3kxlpnzmdp84op9qzxl9olj";
 const mockSurveyId2 = "qo9rwjmms42hoy3k85fp8vgu";
