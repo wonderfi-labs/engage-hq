@@ -18,7 +18,4 @@ export const AlchemyWalletProvider = (
       </AlchemyAccountProvider>
     </QueryClientProvider>
   );
-<<<<<<< HEAD
-};
-=======
 };
