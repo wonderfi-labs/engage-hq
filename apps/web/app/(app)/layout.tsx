@@ -11,9 +11,6 @@ import { headers as nextHeaders } from "next/headers";
 import { Suspense } from "react";
 import { IS_POSTHOG_CONFIGURED, POSTHOG_API_HOST, POSTHOG_API_KEY } from "@formbricks/lib/constants";
 import { getUser } from "@formbricks/lib/user/service";
-import { AlchemyWalletProvider, alchemyConfig } from "@/modules/alchemy-wallet"
-import { cookieToInitialState } from "@account-kit/core";
-import { headers as nextHeaders } from "next/headers";
 
 const AppLayout = async ({ children }) => {
   const session = await getServerSession(authOptions);
@@ -37,7 +34,7 @@ const AppLayout = async ({ children }) => {
           <IntercomClientWrapper user={user} />
           <ToasterClient />
           {/* <AlchemyWalletProvider initialState={alchemyInitialState}> */}
-            {children}
+          {children}
           {/* </AlchemyWalletProvider> */}
         </>
       </PHProvider>
