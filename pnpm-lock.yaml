@@ -8651,14 +8651,9 @@ packages:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
 
-<<<<<<< HEAD
-  date-fns-jalali@4.1.0-0:
-    resolution: {integrity: sha512-hTIP/z+t+qKwBDcmmsnmjWTduxCg+5KfdqWQvb2X/8C9+knYY6epN/pfxdDuyVlSVeFz0sM5eEfwIUQ70U4ckg==}
-=======
   date-fns@2.30.0:
     resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
     engines: {node: '>=0.11'}
->>>>>>> 1f1cf956e (init alchemy-wallet module)
 
   date-fns@4.1.0:
     resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
@@ -26898,13 +26893,9 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
-<<<<<<< HEAD
-  date-fns-jalali@4.1.0-0: {}
-=======
   date-fns@2.30.0:
     dependencies:
       '@babel/runtime': 7.27.0
->>>>>>> 1f1cf956e (init alchemy-wallet module)
 
   date-fns@4.1.0: {}
 

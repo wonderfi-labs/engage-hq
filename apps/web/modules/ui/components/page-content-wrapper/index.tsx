@@ -1,5 +1,4 @@
 import { cn } from "@formbricks/lib/cn";
-
 interface PageContentWrapperProps {
   children: React.ReactNode;
   className?: string;
