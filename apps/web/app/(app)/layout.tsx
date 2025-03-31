@@ -8,11 +8,19 @@ import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 import { IS_POSTHOG_CONFIGURED, POSTHOG_API_HOST, POSTHOG_API_KEY } from "@formbricks/lib/constants";
 import { getUser } from "@formbricks/lib/user/service";
+import { AlchemyWalletProvider, alchemyConfig } from "@/modules/alchemy-wallet"
+import { cookieToInitialState } from "@account-kit/core";
+import { headers as nextHeaders } from "next/headers";
 
 const AppLayout = async ({ children }) => {
   const session = await getServerSession(authOptions);
   const user = session?.user?.id ? await getUser(session.user.id) : null;
-
+  const headers = await nextHeaders();
+  const alchemyInitialState = cookieToInitialState(
+    alchemyConfig,
+    headers.get("cookie") ?? undefined
+  );
+  
   return (
     <>
       <NoMobileOverlay />
@@ -28,7 +36,9 @@ const AppLayout = async ({ children }) => {
           {user ? <FormbricksClient userId={user.id} email={user.email} /> : null}
           <IntercomClientWrapper user={user} />
           <ToasterClient />
-          {children}
+          <AlchemyWalletProvider initialState={alchemyInitialState}>
+            {children}
+          </AlchemyWalletProvider>
         </>
       </PHProvider>
     </>
