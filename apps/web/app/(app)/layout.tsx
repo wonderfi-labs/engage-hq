@@ -33,15 +33,7 @@ const AppLayout = async ({ children }) => {
           {user ? <FormbricksClient userId={user.id} email={user.email} /> : null}
           <IntercomClientWrapper user={user} />
           <ToasterClient />
-<<<<<<< HEAD
-          <AlchemyWalletProvider initialState={alchemyInitialState}>
-            {children}
-          </AlchemyWalletProvider>
-=======
-          {/* <AlchemyWalletProvider initialState={alchemyInitialState}> */}
-          {children}
-          {/* </AlchemyWalletProvider> */}
->>>>>>> 941a60ec9506f8431f4d3151067de5780fa40ecf
+          <AlchemyWalletProvider initialState={alchemyInitialState}>{children}</AlchemyWalletProvider>
         </>
       </PHProvider>
     </>

@@ -27,7 +27,7 @@ const uiConfig: AlchemyAccountsUIConfig = {
 // Alchemy config
 export const alchemyConfig = createConfig(
   {
-    transport: alchemy({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || ""}),
+    transport: alchemy({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "" }),
     chain: sepolia,
     ssr: true,
     enablePopupOauth: true,
