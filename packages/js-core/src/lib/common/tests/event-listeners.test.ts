@@ -1,5 +1,4 @@
 // event-listeners.test.ts
-import { type Mock, beforeEach, describe, expect, test, vi } from "vitest";
 import {
   addCleanupEventListeners,
   addEventListeners,
@@ -9,6 +8,7 @@ import {
 import * as environmentState from "@/lib/environment/state";
 import * as pageUrlEventListeners from "@/lib/survey/no-code-action";
 import * as userState from "@/lib/user/state";
+import { type Mock, beforeEach, describe, expect, test, vi } from "vitest";
 
 // 1) Mock all the imported dependencies
 
