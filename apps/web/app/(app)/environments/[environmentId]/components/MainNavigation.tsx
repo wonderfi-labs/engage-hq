@@ -4,6 +4,7 @@ import { getLatestStableFbReleaseAction } from "@/app/(app)/environments/[enviro
 import { NavigationLink } from "@/app/(app)/environments/[environmentId]/components/NavigationLink";
 import { formbricksLogout } from "@/app/lib/formbricks";
 import FBLogo from "@/images/formbricks-wordmark.svg";
+import { WalletButton } from "@/modules/alchemy-wallet";
 import { CreateOrganizationModal } from "@/modules/organization/components/CreateOrganizationModal";
 import { ProjectSwitcher } from "@/modules/projects/components/project-switcher";
 import { ProfileAvatar } from "@/modules/ui/components/avatars";
@@ -54,7 +55,7 @@ import { TOrganization } from "@formbricks/types/organizations";
 import { TProject } from "@formbricks/types/project";
 import { TUser } from "@formbricks/types/user";
 import packageJson from "../../../../../package.json";
-import { WalletButton } from "@/modules/alchemy-wallet";
+
 interface NavigationProps {
   environment: TEnvironment;
   organizations: TOrganization[];
@@ -295,13 +296,12 @@ export const MainNavigation = ({
           </div>
 
           <div>
-
             {/* New Version Available */}
             {!isCollapsed && isOwnerOrManager && latestVersion && !isFormbricksCloud && (
               <Link
-              href="https://github.com/formbricks/formbricks/releases"
-              target="_blank"
-              className="m-2 flex items-center space-x-4 rounded-lg border border-slate-200 bg-slate-100 p-2 text-sm text-slate-800 hover:border-slate-300 hover:bg-slate-200">
+                href="https://github.com/formbricks/formbricks/releases"
+                target="_blank"
+                className="m-2 flex items-center space-x-4 rounded-lg border border-slate-200 bg-slate-100 p-2 text-sm text-slate-800 hover:border-slate-300 hover:bg-slate-200">
                 <p className="flex items-center justify-center gap-x-2 text-xs">
                   <RocketIcon strokeWidth={1.5} className="mx-1 h-6 w-6 text-slate-900" />
                   {t("common.new_version_available", { version: latestVersion })}
@@ -310,9 +310,7 @@ export const MainNavigation = ({
             )}
 
             {/* Alchemy Wallet Login */}
-            {!isCollapsed && (
-              <WalletButton/>
-            )}
+            {!isCollapsed && <WalletButton />}
 
             {/* Project Switch */}
             {!isBilling && (

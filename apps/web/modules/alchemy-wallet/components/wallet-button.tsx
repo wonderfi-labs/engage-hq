@@ -9,11 +9,11 @@ export function WalletButton(): React.JSX.Element {
   const signerStatus = useSignerStatus();
   const { logout } = useLogout();
   return (
-    <div className="flex items-center justify-center gap-4 p-2 w-full text-center">
+    <div className="flex w-full items-center justify-center gap-4 p-2 text-center">
       {signerStatus.isInitializing ? (
         <>Loading...</>
       ) : user ? (
-        <div className="flex flex-col gap-2 ">
+        <div className="flex flex-col gap-2">
           <p className="text-xl font-bold">Success!</p>
           You're logged in as {user.email ?? "anon"}.
           <button className="akui-btn akui-btn-primary mt-6" onClick={() => logout()}>
