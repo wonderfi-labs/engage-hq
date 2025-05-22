@@ -59,8 +59,18 @@ const handleAuth = async (request: NextRequest): Promise<Response | null> => {
   }
 
   const callbackUrl = request.nextUrl.searchParams.get("callbackUrl");
+  // if (token && callbackUrl) {
+  //   return NextResponse.redirect(WEBAPP_URL + callbackUrl);
+  // }
+
   if (token && callbackUrl) {
-    return NextResponse.redirect(WEBAPP_URL + callbackUrl);
+    try {
+      const redirectUrl = new URL(callbackUrl, WEBAPP_URL);
+      return NextResponse.redirect(redirectUrl.toString());
+    } catch (e) {
+      console.error("Invalid callbackUrl:", callbackUrl);
+      return NextResponse.redirect(WEBAPP_URL);
+    }
   }
   return null;
 };

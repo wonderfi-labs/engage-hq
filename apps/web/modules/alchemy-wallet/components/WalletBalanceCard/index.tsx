@@ -4,13 +4,14 @@ import WalletAddress from "@/modules/alchemy-wallet/components/WalletBalanceCard
 import WalletEthBalance from "@/modules/alchemy-wallet/components/WalletBalanceCard/components/wallet-eth-balance";
 import WalletTokenBalances from "@/modules/alchemy-wallet/components/WalletBalanceCard/components/wallet-token-balances";
 import { useTranslate } from "@tolgee/react";
+import { SessionProvider, signIn } from "next-auth/react";
 import { cn } from "@formbricks/lib/cn";
 
 export function WalletBalanceCard({ className = "" }: { className?: string }) {
   const { t } = useTranslate();
 
   return (
-    <>
+    <SessionProvider>
       <div
         className={cn(
           "relative my-4 flex w-full flex-col gap-4 rounded-xl border border-slate-200 bg-white px-4 py-4 text-left shadow-sm md:flex-row",
@@ -41,7 +42,15 @@ export function WalletBalanceCard({ className = "" }: { className?: string }) {
         </div>
       </div>
       <WalletTokenBalances />
-    </>
+      <button onClick={() => signIn("twitter")}>Sign in with Twitter</button>
+      {/* <a
+  href={`/api/auth/signin/twitter?callbackUrl=${encodeURIComponent("")}`}
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Sign in with Twitter
+</a> */}
+    </SessionProvider>
   );
 }
 

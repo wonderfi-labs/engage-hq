@@ -12,6 +12,7 @@ import { useTranslate } from "@tolgee/react";
 import { TokenBalance } from "@wonderchain/sdk/dist/blockscout-client";
 import { formatUnits } from "ethers";
 import { PlusIcon, SendIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import { cn } from "@formbricks/lib/cn";
@@ -26,7 +27,8 @@ export function WalletTokenBalances({ className = "" }: { className?: string }) 
   const [selectedBalance, setSelectedBalance] = useState<TokenBalance | null>(null);
   const [showSendModal, setShowSendModal] = useState(false);
   const [showWalletModal, setShowWalletModal] = useState(false);
-
+  const { data: session } = useSession();
+  console.log(session);
   const openSendModal = useCallback(() => {
     setShowSendModal(true);
   }, []);

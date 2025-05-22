@@ -1,7 +1,8 @@
+import { TwitterOAuth2Provider, TwitterProfile } from "@/modules/auth/lib/twitterAuth";
 import { getUserByEmail, updateUser } from "@/modules/auth/lib/user";
 import { verifyPassword } from "@/modules/auth/lib/utils";
 import { generateUserAvatar } from "@/modules/auth/signup/lib/avatar";
-import type { Account, NextAuthOptions } from "next-auth";
+import type { Account, NextAuthOptions, Profile } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@formbricks/database";
 import { ALCHEMY_API_KEY, EMAIL_VERIFICATION_DISABLED, ENCRYPTION_KEY } from "@formbricks/lib/constants";
@@ -279,12 +280,26 @@ export const authOptions: NextAuthOptions = {
         return user;
       },
     }),
+    TwitterOAuth2Provider,
   ],
   session: {
     maxAge: 24 * 3600,
   },
   callbacks: {
-    async jwt({ token }) {
+    async jwt({ token, account, profile }) {
+      //     console.log("[JWT CALLBACK] Start");
+      console.log("token (before):", token);
+      console.log("account:", account);
+      console.log("profile:", profile);
+      // Handle Twitter OAuth2
+      if (account?.provider === "twitter" && profile) {
+        const twitterProfile = profile as TwitterProfile;
+        token.twitterId = twitterProfile.id;
+        token.twitterUsername = twitterProfile.username;
+        token.twitterAccessToken = account.access_token;
+        token.twitterRefreshToken = account.refresh_token;
+        return token;
+      }
       const existingUser = await getUserByEmail(token?.email!);
 
       if (!existingUser) {
@@ -297,10 +312,21 @@ export const authOptions: NextAuthOptions = {
       };
     },
     async session({ session, token }) {
+      // console.log("session  (before):", session);
+      // console.log("session token (before):", token);
+
       // @ts-expect-error
       session.user.id = token?.id;
       // @ts-expect-error
       session.user = token.profile;
+      // @ts-expect-error
+      session.twitterId = token.twitterId;
+      // @ts-expect-error
+      session.twitterAccessToken = token.twitterAccessToken;
+      // @ts-expect-error
+      session.twitterRefreshToken = token.twitterRefreshToken;
+      // @ts-expect-error
+      session.twitterUsername = token.twitterUsername;
 
       return session;
     },
@@ -320,4 +346,5 @@ export const authOptions: NextAuthOptions = {
     signOut: "/auth/logout",
     error: "/auth/login", // Error code passed in query string as ?error=
   },
+  debug: true,
 };
