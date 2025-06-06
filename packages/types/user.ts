@@ -59,6 +59,9 @@ export const ZUser = z.object({
   notificationSettings: ZUserNotificationSettings,
   whitelist: z.boolean(),
   locale: ZUserLocale,
+  communityName: z.string().nullable(),
+  communityDescription: z.string().nullable(),
+  communityAvatarUrl: z.string().url().nullable(),
 });
 
 export type TUser = z.infer<typeof ZUser>;
@@ -73,6 +76,9 @@ export const ZUserUpdateInput = z.object({
   imageUrl: z.string().nullish(),
   notificationSettings: ZUserNotificationSettings.optional(),
   locale: ZUserLocale.optional(),
+  communityName: z.string().nullish(),
+  communityDescription: z.string().nullish(),
+  communityAvatarUrl: z.string().nullish(),
 });
 
 export type TUserUpdateInput = z.infer<typeof ZUserUpdateInput>;
@@ -88,6 +94,7 @@ export const ZUserCreateInput = z.object({
   identityProvider: ZUserIdentityProvider.optional(),
   identityProviderAccountId: z.string().optional(),
   locale: ZUserLocale.optional(),
+  communityAvatarUrl: z.string().nullish(),
 });
 
 export type TUserCreateInput = z.infer<typeof ZUserCreateInput>;
