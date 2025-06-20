@@ -66,6 +66,8 @@ export const ZUser = z.object({
 
 export type TUser = z.infer<typeof ZUser>;
 
+// Update this here if using the profile page
+// https://www.notion.so/bitbuy/Create-UI-to-update-user-s-community-name-and-description-202f256cbc57807ba7f0cdd6e6f7d1e3?source=copy_link
 export const ZUserUpdateInput = z.object({
   name: ZUserName.optional(),
   email: ZUserEmail.optional(),
@@ -133,6 +135,8 @@ export const ZUserWhitelistInfo = z.object({
     })
     .optional(),
   createdSurveys: z.number().optional(),
+  surveyRewards: z.number().optional(),
+  surveysCompleted: z.number().optional(),
   createdAt: z.date().optional(),
   members: z.array(ZCommunityMember).optional(),
 });

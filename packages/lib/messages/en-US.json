@@ -659,13 +659,14 @@
         "community_successfully_added": "Community successfully added"
       },
       "community_created": "Community created",
+      "completed_engagements": "Completed engagements",
+
       "confirm_leave": "Are you sure you want to leave this community?",
 
       "remove": {
         "community_successfully_removed": "Community successfully removed"
       },
       "total_engagements": "Total engagements",
-
       "total_rewards_given": "Total rewards given"
     },
     "connect": {
