@@ -191,15 +191,80 @@ export const getAvailableUserCommunities = async ({
 
     const availableUserCommunitiesWithSurveysCount = await Promise.all(
       availableUserCommunities.map(async (community) => {
-        const surveysCount = await prisma.survey.count({
+        const surveys = await prisma.survey.findMany({
           where: {
             createdBy: community.id,
           },
+          select: {
+            id: true,
+            reward: true,
+          },
         });
+
+        const surveyIds = surveys.map((s) => s.id);
+
+        const surveysCount = surveys.length;
+        const rewards = surveys
+          .filter(
+            (s) =>
+              s.reward && s.reward.amount !== undefined && s.reward.amount !== null && s.reward.amount !== ""
+          )
+          .map((s) => s.reward);
+        const rewardsCount = rewards.length;
+
+        const communityMembers = await prisma.userCommunity.findMany({
+          where: {
+            creatorId: community.id,
+          },
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                imageUrl: true,
+                socials: {
+                  select: {
+                    id: true,
+                    provider: true,
+                    socialId: true,
+                    socialName: true,
+                    socialEmail: true,
+                    socialAvatar: true,
+                  },
+                },
+                email: true,
+              },
+            },
+          },
+        });
+
+        const memberEmails = communityMembers.map((m) => m.user.email).filter(Boolean);
+        const responses = await prisma.response.findMany({
+          where: {
+            surveyId: { in: surveyIds },
+          },
+          select: {
+            surveyId: true,
+            data: true,
+          },
+        });
+
+        const completedSet = new Set<string>();
+        for (const r of responses) {
+          const email = r.data?.verifiedEmail;
+          if (typeof email === "string" && memberEmails.includes(email)) {
+            completedSet.add(`${r.surveyId}:${email}`);
+          }
+        }
+
+        const surveysCompleted = completedSet.size;
 
         return {
           ...community,
           createdSurveys: surveysCount,
+          surveyRewards: rewardsCount,
+          surveysCompleted: surveysCompleted,
+          members: communityMembers.map((member) => member.user),
         };
       })
     );
@@ -253,11 +318,28 @@ export const getCommunity = async ({ communityId }: { communityId: string }): Pr
       throw new InvalidInputError("Community does not exist!");
     }
 
-    const surveysCount = await prisma.survey.count({
+    const surveys = await prisma.survey.findMany({
       where: {
         createdBy: community.id,
+        status: { notIn: ["draft", "scheduled"] },
+      },
+      select: {
+        id: true,
+        reward: true,
       },
     });
+
+    const surveyIds = surveys.map((s) => s.id);
+
+    const surveysCount = surveys.length;
+
+    const rewards = surveys
+      .filter(
+        (s) => s.reward && s.reward.amount !== undefined && s.reward.amount !== null && s.reward.amount !== ""
+      )
+      .map((s) => s.reward);
+
+    const rewardsCount = rewards.length;
 
     const communityMembers = await prisma.userCommunity.findMany({
       where: {
@@ -279,14 +361,38 @@ export const getCommunity = async ({ communityId }: { communityId: string }): Pr
                 socialAvatar: true,
               },
             },
+            email: true,
           },
         },
       },
     });
 
+    const memberEmails = communityMembers.map((m) => m.user.email).filter(Boolean);
+    const responses = await prisma.response.findMany({
+      where: {
+        surveyId: { in: surveyIds },
+      },
+      select: {
+        surveyId: true,
+        data: true,
+      },
+    });
+
+    const completedSet = new Set<string>();
+    for (const r of responses) {
+      const email = r.data?.verifiedEmail;
+      if (typeof email === "string" && memberEmails.includes(email)) {
+        completedSet.add(`${r.surveyId}:${email}`);
+      }
+    }
+
+    const surveysCompleted = completedSet.size;
+
     return {
       ...community,
       createdSurveys: surveysCount,
+      surveyRewards: rewardsCount,
+      surveysCompleted: surveysCompleted,
       members: communityMembers.map((member) => member.user),
     };
   } catch (error) {

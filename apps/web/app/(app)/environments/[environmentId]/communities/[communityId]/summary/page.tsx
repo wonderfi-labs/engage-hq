@@ -97,7 +97,11 @@ const CommunityPage = async (props: { params: Promise<{ environmentId: string; c
           label={t("environments.community.total_engagements")}
           icon="note"
         />
-        {/* <CommunityStatCard value="-" label={t("environments.community.total_rewards_given")} icon="trophy" /> */}
+        <CommunityStatCard
+          value={community.surveysCompleted || 0}
+          label={t("environments.community.completed_engagements")}
+          icon="note"
+        />
         <CommunityStatCard
           value={
             community.createdAt
@@ -110,6 +114,13 @@ const CommunityPage = async (props: { params: Promise<{ environmentId: string; c
           label={t("environments.community.community_created")}
           icon="heart"
         />
+        {/* TODO: Need to calculate this still */}
+        {/* <CommunityStatCard
+          value={community.surveyRewards || 0}
+          label={t("environments.community.total_rewards_given")}
+          icon="trophy"
+        /> */}
+        <CommunityStatCard value={community.members?.length || 0} label={t("common.members")} icon="member" />
       </div>
 
       <div className="space-y-10 pt-10">
