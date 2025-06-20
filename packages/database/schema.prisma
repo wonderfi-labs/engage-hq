@@ -848,6 +848,8 @@ model User {
   communityName             String?
   communityDescription      String?
   communityAvatarUrl        String?
+  communityBannerUrl        String?
+  communitySlug             String?          @unique
 
   socials  UserSocial[] @relation("userSocial")
   activity Activity[]
