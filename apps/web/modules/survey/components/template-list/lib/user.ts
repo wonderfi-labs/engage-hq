@@ -31,6 +31,8 @@ export const updateUser = async (personId: string, data: TUserUpdateInput): Prom
         communityName: true,
         communityDescription: true,
         communityAvatarUrl: true,
+        communityBannerUrl: true,
+        communitySlug: true,
       },
     });
 

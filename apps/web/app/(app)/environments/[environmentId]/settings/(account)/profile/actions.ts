@@ -49,40 +49,6 @@ export const removeAvatarAction = authenticatedActionClient
     return await updateUser(ctx.user.id, { imageUrl: null });
   });
 
-const ZUpdateCommunityAvatarAction = z.object({
-  communityAvatarUrl: z.string(),
-});
-
-export const updateCommunityAvatarAction = authenticatedActionClient
-  .schema(ZUpdateCommunityAvatarAction)
-  .action(async ({ parsedInput, ctx }) => {
-    return await updateUser(ctx.user.id, { communityAvatarUrl: parsedInput.communityAvatarUrl });
-  });
-
-const ZRemoveCommunityAvatarAction = z.object({
-  environmentId: ZId,
-});
-
-export const removeCommunityAvatarAction = authenticatedActionClient
-  .schema(ZRemoveCommunityAvatarAction)
-  .action(async ({ parsedInput, ctx }) => {
-    const communityAvatarUrl = ctx.user.communityAvatarUrl;
-    if (!communityAvatarUrl) {
-      throw new Error("Image not found");
-    }
-
-    const fileName = getFileNameWithIdFromUrl(communityAvatarUrl);
-    if (!fileName) {
-      throw new Error("Invalid filename");
-    }
-
-    const deletionResult = await deleteFile(parsedInput.environmentId, "public", fileName);
-    if (!deletionResult.success) {
-      throw new Error("Deletion failed");
-    }
-    return await updateUser(ctx.user.id, { communityAvatarUrl: null });
-  });
-
 const ZConnectSocialAccountAction = z.object({
   provider: z.string(),
   socialId: z.string(),

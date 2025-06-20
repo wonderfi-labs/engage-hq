@@ -26,6 +26,12 @@ export const AccountSettingsNavbar = ({
       href: `/environments/${environmentId}/settings/profile`,
       current: pathname?.includes("/profile"),
     },
+    {
+      id: "community",
+      label: t("common.community"),
+      href: `/environments/${environmentId}/settings/community`,
+      current: pathname?.includes("/community"),
+    },
     ...(hasAccess
       ? [
           {
