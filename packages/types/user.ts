@@ -62,6 +62,8 @@ export const ZUser = z.object({
   communityName: z.string().nullable(),
   communityDescription: z.string().nullable(),
   communityAvatarUrl: z.string().url().nullable(),
+  communityBannerUrl: z.string().url().nullable(),
+  communitySlug: z.string().nullable(),
 });
 
 export type TUser = z.infer<typeof ZUser>;
@@ -81,6 +83,8 @@ export const ZUserUpdateInput = z.object({
   communityName: z.string().nullish(),
   communityDescription: z.string().nullish(),
   communityAvatarUrl: z.string().nullish(),
+  communityBannerUrl: z.string().nullish(),
+  communitySlug: z.string().nullish(),
 });
 
 export type TUserUpdateInput = z.infer<typeof ZUserUpdateInput>;

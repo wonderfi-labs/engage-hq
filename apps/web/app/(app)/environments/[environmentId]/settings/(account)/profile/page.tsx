@@ -10,8 +10,6 @@ import { getOrganizationsWhereUserIsSingleOwner } from "@formbricks/lib/organiza
 import { getUser } from "@formbricks/lib/user/service";
 import { SettingsCard } from "../../components/SettingsCard";
 import { DeleteAccount } from "./components/DeleteAccount";
-import { EditCommunityAvatarForm } from "./components/EditCommunityAvatarForm";
-import { EditCommunityForm } from "./components/EditCommunityDetailsForm";
 import { EditProfileAvatarForm } from "./components/EditProfileAvatarForm";
 import { EditProfileDetailsForm } from "./components/EditProfileDetailsForm";
 
@@ -65,22 +63,6 @@ const Page = async (props: { params: Promise<{ environmentId: string }> }) => {
                 session={session}
                 environmentId={environmentId}
                 imageUrl={user.imageUrl}
-              />
-            )}
-          </SettingsCard>
-          <SettingsCard
-            title={t("common.community_profile")}
-            description={t("environments.settings.profile.update_community_info")}>
-            <EditCommunityForm user={user} />
-          </SettingsCard>
-          <SettingsCard
-            title={t("common.community_avatar")}
-            description={t("environments.settings.profile.update_your_community_avatar")}>
-            {user && (
-              <EditCommunityAvatarForm
-                session={session}
-                environmentId={environmentId}
-                communityAvatarUrl={user.communityAvatarUrl}
               />
             )}
           </SettingsCard>

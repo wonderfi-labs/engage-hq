@@ -30,6 +30,8 @@ const responseSelection = {
   communityName: true,
   communityDescription: true,
   communityAvatarUrl: true,
+  communityBannerUrl: true,
+  communitySlug: true,
 };
 
 // function to retrive basic information about a user's user
