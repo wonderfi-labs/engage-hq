@@ -41,7 +41,7 @@ export const AlchemyWalletPage = () => {
       <WalletPageHeader user={user} />
       <WalletBalanceCard tokenCount={balances?.length || 0} />
       <div>
-        <div className="flex justify-center gap-2 px-4 md:hidden">
+        <div className="flex justify-center gap-2 md:hidden">
           <Button
             variant="outline"
             size="lg"

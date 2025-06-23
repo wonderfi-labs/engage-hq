@@ -13,6 +13,9 @@ export const whitelistSelection = {
   communityName: true,
   communityDescription: true,
   createdAt: true,
+  communityAvatarUrl: true,
+  communityBannerUrl: true,
+  communitySlug: true,
 };
 
 export const addUserToWhitelist = async ({

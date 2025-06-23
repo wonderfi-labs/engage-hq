@@ -24,6 +24,7 @@ import { Check, RefreshCw } from "lucide-react";
 import { Session } from "next-auth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { generate } from "random-words";
 import { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -67,8 +68,6 @@ export const EditCommunityForm = ({ user, environmentId, session }: EditCommunit
   const router = useRouter();
   const { t } = useTranslate();
 
-  console.log("user", user);
-  console.log("hasExistingSlug", hasExistingSlug);
   function slugify(str) {
     str = str.replace(/^\s+|\s+$/g, "");
     str = str.toLowerCase();
@@ -79,9 +78,11 @@ export const EditCommunityForm = ({ user, environmentId, session }: EditCommunit
     return str;
   }
 
+  const randomCommunityName = generate({ exactly: 2, join: " " }) as string;
   const form = useForm<TEditCommunityForm>({
     defaultValues: {
-      communityName: user.communityName || "",
+      communityName:
+        user.communityName || randomCommunityName.charAt(0).toUpperCase() + randomCommunityName.slice(1),
       communityDescription: user.communityDescription || "",
       communitySlug: user.communitySlug || "",
     },

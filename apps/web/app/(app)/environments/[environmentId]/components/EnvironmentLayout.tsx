@@ -1,5 +1,5 @@
 import { MainNavigation } from "@/app/(app)/environments/[environmentId]/components/MainNavigation";
-// import { TopControlBar } from "@/app/(app)/environments/[environmentId]/components/TopControlBar";
+import { TopControlBar } from "@/app/(app)/environments/[environmentId]/components/TopControlBar";
 import { DevEnvironmentBanner } from "@/modules/ui/components/dev-environment-banner";
 import { getTranslate } from "@/tolgee/server";
 import type { Session } from "next-auth";
@@ -72,8 +72,15 @@ export const EnvironmentLayout = async ({
           user={user}
           isMultiOrgEnabled={isMultiOrgEnabled}
         />
-        <div id="mainContent" className="flex-1 overflow-y-auto bg-slate-50">
-          {/* <TopControlBar environment={environment} environments={environments} /> */}
+
+        <div id="mainContent" className="flex-1 overflow-y-auto bg-slate-50 pt-14 sm:pt-0">
+          <TopControlBar
+            environment={environment}
+            environments={environments}
+            organization={organization}
+            user={user}
+            hasAccess={hasAccess}
+          />
           <div className="">{children}</div>
         </div>
       </div>

@@ -32,7 +32,7 @@ export function WalletEthBalance({}: Props): React.JSX.Element {
 
   return (
     <div className="flex items-center">
-      <p className="text-primary text-4xl font-bold">
+      <p className="text-primary text-center text-4xl font-bold">
         {showBalance
           ? balance != undefined
             ? `${balance} ETH`
