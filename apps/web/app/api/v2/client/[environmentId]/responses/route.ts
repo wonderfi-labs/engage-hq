@@ -1,6 +1,7 @@
 import { responses } from "@/app/lib/api/response";
 import { transformErrorToDetails } from "@/app/lib/api/validator";
 import { sendToPipeline } from "@/app/lib/pipelines";
+import { addEngagementCompletedActivityAction } from "@/modules/activity/actions";
 import { headers } from "next/headers";
 import { UAParser } from "ua-parser-js";
 import { capturePosthogEnvironmentEvent } from "@formbricks/lib/posthogServer";
@@ -103,6 +104,11 @@ export const POST = async (request: Request, context: Context): Promise<Response
     response = await createResponse({
       ...responseInputData,
       meta,
+    });
+
+    await addEngagementCompletedActivityAction({
+      communityId: survey.createdBy,
+      engagementId: survey.id,
     });
   } catch (error) {
     if (error instanceof InvalidInputError) {

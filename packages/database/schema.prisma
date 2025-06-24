@@ -851,8 +851,9 @@ model User {
   communityBannerUrl        String?
   communitySlug             String?          @unique
 
-  socials  UserSocial[] @relation("userSocial")
-  activity Activity[]
+  socials           UserSocial[] @relation("userSocial")
+  userActivity      Activity[]   @relation("user")
+  communityActivity Activity[]   @relation("community")
 
   @@index([email])
 }
@@ -1131,8 +1132,10 @@ model Activity {
   updatedAt     DateTime          @updatedAt @map(name: "updated_at")
   activityEvent ActivityEventType
   activityType  ActivityType
-  subjectId     String
-  subject       User              @relation(fields: [subjectId], references: [id])
+  communityId   String?
+  community     User?             @relation("community", fields: [communityId], references: [id])
+  userId        String?
+  user          User?             @relation("user", fields: [userId], references: [id])
   metadata      Json?
 
   @@unique([id])

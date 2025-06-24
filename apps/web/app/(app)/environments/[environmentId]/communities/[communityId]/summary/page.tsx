@@ -1,4 +1,5 @@
 import VerifiedImage from "@/images/illustrations/verified-rounded.svg";
+import ActivityFeed from "@/modules/activity/components/feed/activity-feed";
 import CommunityActions from "@/modules/communities/components/community/community-actions";
 import { CommunityStatCard } from "@/modules/communities/components/community/community-stat-card";
 import MembersModal from "@/modules/communities/components/community/members-modal";
@@ -114,6 +115,7 @@ const CommunityPage = async (props: { params: Promise<{ environmentId: string; c
           label={t("environments.community.community_created")}
           icon="heart"
         />
+        <ActivityFeed communityId={community.id} />
         {/* TODO: Need to calculate this still */}
         {/* <CommunityStatCard
           value={community.surveyRewards || 0}

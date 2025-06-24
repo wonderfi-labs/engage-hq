@@ -1,6 +1,7 @@
 "use server";
 
 import { authenticatedActionClient } from "@/lib/utils/action-client";
+import { addMemberJoinedActivityAction, addMemberLeftActivityAction } from "@/modules/activity/actions";
 import {
   addUserCommunity,
   getAvailableUserCommunities,
@@ -24,6 +25,11 @@ export const addUserCommunityAction = authenticatedActionClient
       creatorId: parsedInput.creatorId,
     });
 
+    // Adding member joined activity
+    await addMemberJoinedActivityAction({
+      communityId: parsedInput.creatorId,
+    });
+
     return userCommunityId;
   });
 
@@ -37,6 +43,11 @@ export const removeUserCommunityAction = authenticatedActionClient
     const deletedUserCommunityId = await removeUserCommunity({
       userId: ctx.user.id,
       creatorId: parsedInput.creatorId,
+    });
+
+    // Adding member joined activity
+    await addMemberLeftActivityAction({
+      communityId: parsedInput.creatorId,
     });
 
     return deletedUserCommunityId;

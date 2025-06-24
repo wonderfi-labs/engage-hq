@@ -7,7 +7,10 @@ import {
   addMemberJoinedActivity,
   addMemberLeftActivity,
   addRewardPaidActivity,
+  getCommunityActivity,
+  getUserActivity,
 } from "@/modules/activity/lib/activity";
+import { Activity } from "@prisma/client";
 import { z } from "zod";
 
 const ZAddMemberJoinedActivityAction = z.object({
@@ -18,10 +21,9 @@ export const addMemberJoinedActivityAction = authenticatedActionClient
   .schema(ZAddMemberJoinedActivityAction)
   .action(async ({ parsedInput, ctx }) => {
     const activityId = await addMemberJoinedActivity({
-      subjectId: ctx.user.id,
-      metadata: {
-        communityId: parsedInput.communityId,
-      },
+      userId: ctx.user.id,
+      communityId: parsedInput.communityId,
+      metadata: {},
     });
 
     return activityId;
@@ -35,17 +37,16 @@ export const addMemberLeftActivityAction = authenticatedActionClient
   .schema(ZAddMemberLeftActivityAction)
   .action(async ({ parsedInput, ctx }) => {
     const activityId = await addMemberLeftActivity({
-      subjectId: ctx.user.id,
-      metadata: {
-        communityId: parsedInput.communityId,
-      },
+      userId: ctx.user.id,
+      communityId: parsedInput.communityId,
+      metadata: {},
     });
 
     return activityId;
   });
 
 const ZAddEngagementCompletedActivityAction = z.object({
-  communityId: z.string(),
+  communityId: z.string().nullable(),
   engagementId: z.string(),
 });
 
@@ -53,9 +54,9 @@ export const addEngagementCompletedActivityAction = authenticatedActionClient
   .schema(ZAddEngagementCompletedActivityAction)
   .action(async ({ parsedInput, ctx }) => {
     const activityId = await addEngagementCompletedActivity({
-      subjectId: ctx.user.id,
+      userId: ctx.user.id,
+      communityId: parsedInput.communityId,
       metadata: {
-        communityId: parsedInput.communityId,
         engagementId: parsedInput.engagementId,
       },
     });
@@ -65,7 +66,6 @@ export const addEngagementCompletedActivityAction = authenticatedActionClient
 
 const ZAddEngagementCreatedActivityAction = z.object({
   engagementId: z.string(),
-  title: z.string(),
   reward: z.any(),
 });
 
@@ -73,10 +73,9 @@ export const addEngagementCreatedActivityAction = authenticatedActionClient
   .schema(ZAddEngagementCreatedActivityAction)
   .action(async ({ parsedInput, ctx }) => {
     const activityId = await addEngagementCreatedActivity({
-      subjectId: ctx.user.id,
+      communityId: ctx.user.id,
       metadata: {
         engagementId: parsedInput.engagementId,
-        title: parsedInput.title,
         reward: parsedInput.reward,
       },
     });
@@ -85,6 +84,7 @@ export const addEngagementCreatedActivityAction = authenticatedActionClient
   });
 
 const ZAddRewardPaidActivityAction = z.object({
+  communityId: z.string().nullable(),
   engagementId: z.string(),
   reward: z.any(),
 });
@@ -93,7 +93,8 @@ export const addRewardPaidActivityAction = authenticatedActionClient
   .schema(ZAddRewardPaidActivityAction)
   .action(async ({ parsedInput, ctx }) => {
     const activityId = await addRewardPaidActivity({
-      subjectId: ctx.user.id,
+      userId: ctx.user.id,
+      communityId: parsedInput.communityId,
       metadata: {
         engagementId: parsedInput.engagementId,
         reward: parsedInput.reward,
@@ -101,4 +102,44 @@ export const addRewardPaidActivityAction = authenticatedActionClient
     });
 
     return activityId;
+  });
+
+const ZGetCommunityActivityAction = z.object({
+  communityId: z.string(),
+});
+
+export const getCommunityActivityAction = authenticatedActionClient
+  .schema(ZGetCommunityActivityAction)
+  .action(async ({ parsedInput }): Promise<Activity[]> => {
+    const communityActivity = await getCommunityActivity({
+      communityId: parsedInput.communityId,
+    });
+
+    return communityActivity;
+  });
+
+const ZGetUserActivityAction = z.object({
+  userId: z.string(),
+});
+
+export const getUserActivityAction = authenticatedActionClient
+  .schema(ZGetUserActivityAction)
+  .action(async ({ parsedInput }): Promise<Activity[]> => {
+    const userActivity = await getUserActivity({
+      userId: parsedInput.userId,
+    });
+
+    return userActivity;
+  });
+
+const ZGetCurrentUserActivityAction = z.object({});
+
+export const getCurrentUserActivityAction = authenticatedActionClient
+  .schema(ZGetCurrentUserActivityAction)
+  .action(async ({ ctx }): Promise<Activity[]> => {
+    const userActivity = await getUserActivity({
+      userId: ctx.user.id,
+    });
+
+    return userActivity;
   });

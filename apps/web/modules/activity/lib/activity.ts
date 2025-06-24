@@ -1,4 +1,4 @@
-import { ActivityEventType, ActivityType, Prisma } from "@prisma/client";
+import { Activity, ActivityEventType, ActivityType, Prisma } from "@prisma/client";
 import { prisma } from "@formbricks/database";
 import {
   TEngagementCompletedMetadata,
@@ -10,27 +10,40 @@ import {
 import { DatabaseError, InvalidInputError } from "@formbricks/types/errors";
 
 export const addMemberJoinedActivity = async ({
-  subjectId,
+  userId,
+  communityId,
   metadata,
 }: {
-  subjectId: string;
+  userId: string;
+  communityId: string;
   metadata: TMemberJoinedMetadata;
 }): Promise<string> => {
   try {
     const user = await prisma.user.findUnique({
-      where: { id: subjectId },
+      where: { id: userId },
       select: { id: true },
     });
 
     // Check if user exists
     if (!user) {
-      throw new InvalidInputError("User/Community does not exist!");
+      throw new InvalidInputError("User does not exist!");
+    }
+
+    const community = await prisma.user.findUnique({
+      where: { id: communityId },
+      select: { id: true },
+    });
+
+    // Check if community exists
+    if (!community) {
+      throw new InvalidInputError("Community does not exist!");
     }
 
     // Create new activity
     const activity = await prisma.activity.create({
       data: {
-        subjectId: subjectId,
+        userId: userId,
+        communityId: communityId,
         activityEvent: ActivityEventType.MEMBER_JOINED,
         activityType: ActivityType.USER,
         metadata: metadata,
@@ -47,27 +60,40 @@ export const addMemberJoinedActivity = async ({
 };
 
 export const addMemberLeftActivity = async ({
-  subjectId,
+  userId,
+  communityId,
   metadata,
 }: {
-  subjectId: string;
+  userId: string;
+  communityId: string;
   metadata: TMemberLeftMetadata;
 }): Promise<string> => {
   try {
     const user = await prisma.user.findUnique({
-      where: { id: subjectId },
+      where: { id: userId },
       select: { id: true },
     });
 
     // Check if user exists
     if (!user) {
-      throw new InvalidInputError("User/Community does not exist!");
+      throw new InvalidInputError("User does not exist!");
+    }
+
+    const community = await prisma.user.findUnique({
+      where: { id: communityId },
+      select: { id: true },
+    });
+
+    // Check if community exists
+    if (!community) {
+      throw new InvalidInputError("Community does not exist!");
     }
 
     // Create new activity
     const activity = await prisma.activity.create({
       data: {
-        subjectId: subjectId,
+        userId: userId,
+        communityId: communityId,
         activityEvent: ActivityEventType.MEMBER_LEFT,
         activityType: ActivityType.USER,
         metadata: metadata,
@@ -84,27 +110,42 @@ export const addMemberLeftActivity = async ({
 };
 
 export const addEngagementCompletedActivity = async ({
-  subjectId,
+  userId,
+  communityId,
   metadata,
 }: {
-  subjectId: string;
+  userId: string;
+  communityId: string | null;
   metadata: TEngagementCompletedMetadata;
 }): Promise<string> => {
   try {
     const user = await prisma.user.findUnique({
-      where: { id: subjectId },
+      where: { id: userId },
       select: { id: true },
     });
 
     // Check if user exists
     if (!user) {
-      throw new InvalidInputError("User/Community does not exist!");
+      throw new InvalidInputError("User does not exist!");
+    }
+
+    if (communityId) {
+      const community = await prisma.user.findUnique({
+        where: { id: communityId },
+        select: { id: true },
+      });
+
+      // Check if community exists
+      if (!community) {
+        throw new InvalidInputError("Community does not exist!");
+      }
     }
 
     // Create new activity
     const activity = await prisma.activity.create({
       data: {
-        subjectId: subjectId,
+        userId: userId,
+        communityId: communityId,
         activityEvent: ActivityEventType.ENGAGEMENT_COMPLETED,
         activityType: ActivityType.USER,
         metadata: metadata,
@@ -121,27 +162,27 @@ export const addEngagementCompletedActivity = async ({
 };
 
 export const addEngagementCreatedActivity = async ({
-  subjectId,
+  communityId,
   metadata,
 }: {
-  subjectId: string;
+  communityId: string;
   metadata: TEngagementCreatedMetadata;
 }): Promise<string> => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: subjectId },
+    const community = await prisma.user.findUnique({
+      where: { id: communityId },
       select: { id: true },
     });
 
     // Check if user exists
-    if (!user) {
-      throw new InvalidInputError("User/Community does not exist!");
+    if (!community) {
+      throw new InvalidInputError("Community does not exist!");
     }
 
     // Create new activity
     const activity = await prisma.activity.create({
       data: {
-        subjectId: subjectId,
+        communityId: communityId,
         activityEvent: ActivityEventType.ENGAGEMENT_CREATED,
         activityType: ActivityType.COMMUNITY,
         metadata: metadata,
@@ -158,27 +199,42 @@ export const addEngagementCreatedActivity = async ({
 };
 
 export const addRewardPaidActivity = async ({
-  subjectId,
+  userId,
+  communityId,
   metadata,
 }: {
-  subjectId: string;
+  userId: string;
+  communityId: string | null;
   metadata: TRewardPaidMetadata;
 }): Promise<string> => {
   try {
     const user = await prisma.user.findUnique({
-      where: { id: subjectId },
+      where: { id: userId },
       select: { id: true },
     });
 
     // Check if user exists
     if (!user) {
-      throw new InvalidInputError("User/Community does not exist!");
+      throw new InvalidInputError("User does not exist!");
+    }
+
+    if (communityId) {
+      const community = await prisma.user.findUnique({
+        where: { id: communityId },
+        select: { id: true },
+      });
+
+      // Check if community exists
+      if (!community) {
+        throw new InvalidInputError("Community does not exist!");
+      }
     }
 
     // Create new activity
     const activity = await prisma.activity.create({
       data: {
-        subjectId: subjectId,
+        userId: userId,
+        communityId: communityId,
         activityEvent: ActivityEventType.REWARD_PAID,
         activityType: ActivityType.USER,
         metadata: metadata,
@@ -186,6 +242,68 @@ export const addRewardPaidActivity = async ({
     });
 
     return activity.id;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new DatabaseError(error.message);
+    }
+    throw error;
+  }
+};
+
+export const getCommunityActivity = async ({ communityId }: { communityId: string }): Promise<Activity[]> => {
+  try {
+    const community = await prisma.user.findUnique({
+      where: { id: communityId },
+      select: { id: true },
+    });
+
+    // Check if user exists
+    if (!community) {
+      throw new InvalidInputError("Community does not exist!");
+    }
+
+    const communityActivity = await prisma.activity.findMany({
+      where: {
+        communityId: communityId,
+      },
+      include: {
+        user: true,
+        community: true,
+      },
+    });
+
+    return communityActivity;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new DatabaseError(error.message);
+    }
+    throw error;
+  }
+};
+
+export const getUserActivity = async ({ userId }: { userId: string }): Promise<Activity[]> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+
+    // Check if user exists
+    if (!user) {
+      throw new InvalidInputError("User does not exist!");
+    }
+
+    const userActivity = await prisma.activity.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        user: true,
+        community: true,
+      },
+    });
+
+    return userActivity;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       throw new DatabaseError(error.message);

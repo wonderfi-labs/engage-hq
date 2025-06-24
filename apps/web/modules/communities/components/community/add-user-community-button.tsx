@@ -23,9 +23,11 @@ export function AddUserCommunityButton({ creatorId, className }: Props): React.J
     try {
       setLoading(true);
 
+      // Adding user to community
       await addUserCommunityAction({
         creatorId: creatorId,
       });
+
       toast.success(t("environments.community.add.community_successfully_added"));
 
       setLoading(false);
