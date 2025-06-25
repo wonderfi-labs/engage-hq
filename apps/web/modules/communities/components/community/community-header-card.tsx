@@ -12,7 +12,7 @@ interface CommunityHeaderCardProps {
 export default function CommunityHeaderCard({ community, currentUserId, t }: CommunityHeaderCardProps) {
   return (
     <div className="mb-8 rounded-2xl">
-      <div className="relative min-h-36 overflow-hidden rounded-t-2xl">
+      <div className="relative min-h-48 overflow-hidden rounded-t-2xl">
         {community.communityBannerUrl ? (
           <Image
             src={community.communityBannerUrl}
@@ -22,7 +22,7 @@ export default function CommunityHeaderCard({ community, currentUserId, t }: Com
             priority
           />
         ) : (
-          <div className="min-h-36 w-full bg-gradient-to-r from-[#8fd3f4] to-[#a6c1ee]" />
+          <div className="min-h-48 w-full bg-gradient-to-r from-[#8fd3f4] to-[#a6c1ee]" />
         )}
       </div>
       <div className="relative z-10 -mt-8">
@@ -47,7 +47,9 @@ export default function CommunityHeaderCard({ community, currentUserId, t }: Com
               </div>
             </div>
             {community.communityDescription && (
-              <p className="mt-2 text-sm text-slate-700 md:text-lg">{community.communityDescription}</p>
+              <p className="mt-6 text-sm text-slate-700 md:mt-2 md:text-lg">
+                {community.communityDescription}
+              </p>
             )}
             <div className="mt-4 flex flex-col flex-wrap gap-2 md:mt-6 md:flex-row md:items-center">
               <div className="flex">

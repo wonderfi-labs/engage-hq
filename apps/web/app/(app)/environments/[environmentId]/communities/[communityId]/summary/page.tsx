@@ -67,14 +67,14 @@ const CommunityPage = async (props: { params: Promise<{ environmentId: string; c
       <div className="space-y-10 pt-10">
         <div className="text-2xl font-bold">
           {t("common.available_surveys")}
-          <div className="grid grid-cols-3 gap-10">
+          <div className="grid gap-10 md:grid-cols-3">
             <AvailableEngagements searchQuery="" creatorId={community.id} />
           </div>
         </div>
         <div className="space-y-10">
           <div className="text-2xl font-bold">
             {t("common.past_surveys")}
-            <div className="grid grid-cols-3 gap-10">
+            <div className="grid gap-10 md:grid-cols-3">
               <PastEngagements searchQuery="" creatorId={community.id} />
             </div>
           </div>
@@ -82,7 +82,7 @@ const CommunityPage = async (props: { params: Promise<{ environmentId: string; c
         <div className="space-y-10">
           <div className="text-2xl font-bold">
             {t("common.completed_surveys")}
-            <div className="grid grid-cols-3 gap-10">
+            <div className="md:rid-cols-3 grid gap-10">
               <CompletedSurveys searchQuery="" creatorId={community.id} showEmptyBorder={false} />
             </div>
           </div>
