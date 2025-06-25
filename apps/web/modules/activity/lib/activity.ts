@@ -270,6 +270,9 @@ export const getCommunityActivity = async ({ communityId }: { communityId: strin
         user: true,
         community: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     return communityActivity;
@@ -300,6 +303,9 @@ export const getUserActivity = async ({ userId }: { userId: string }): Promise<A
       include: {
         user: true,
         community: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
