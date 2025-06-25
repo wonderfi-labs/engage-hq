@@ -1,5 +1,6 @@
 "use client";
 
+import { addRewardPaidActivityAction } from "@/modules/activity/actions";
 import SendModal from "@/modules/alchemy-wallet/components/common/send-modal";
 import { Button } from "@/modules/ui/components/button";
 import { DeleteDialog } from "@/modules/ui/components/delete-dialog";
@@ -136,6 +137,11 @@ export const SingleResponseCard = ({
     try {
       const noteText = `${t("environments.surveys.responses.paid_reward_to")} ${tx.to}\n${t("environments.surveys.responses.transaction_hash")} ${tx.hash}`;
       await createResponseNoteAction({ responseId: response.id, text: noteText });
+      await addRewardPaidActivityAction({
+        communityId: survey.createdBy,
+        engagementId: response.id,
+        reward: survey.reward,
+      });
       await updateFetchedResponses();
     } catch (e) {
       toast.error(t("environments.surveys.responses.an_error_occurred_creating_a_new_note"));

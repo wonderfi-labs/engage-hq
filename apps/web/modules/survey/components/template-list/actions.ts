@@ -3,6 +3,7 @@
 import { authenticatedActionClient } from "@/lib/utils/action-client";
 import { checkAuthorizationUpdated } from "@/lib/utils/action-client-middleware";
 import { getOrganizationIdFromEnvironmentId } from "@/lib/utils/helper";
+import { addEngagementCreatedActivityAction } from "@/modules/activity/actions";
 import { createSurvey } from "@/modules/survey/components/template-list/lib/survey";
 import { getSurveyFollowUpsPermission } from "@/modules/survey/follow-ups/lib/utils";
 import { getOrganizationBilling } from "@/modules/survey/lib/survey";
@@ -53,6 +54,11 @@ export const createSurveyAction = authenticatedActionClient
     if (parsedInput.surveyBody.followUps?.length) {
       await checkSurveyFollowUpsPermission(organizationId);
     }
+    const survey = await createSurvey(parsedInput.environmentId, parsedInput.surveyBody);
+    await addEngagementCreatedActivityAction({
+      engagementId: survey.id,
+      reward: survey.reward,
+    });
 
-    return await createSurvey(parsedInput.environmentId, parsedInput.surveyBody);
+    return survey;
   });

@@ -17,20 +17,15 @@ export type TActivityFeedItem = z.infer<typeof ZActivityFeedItem>;
 
 // Custom EngageHq Activity Types
 
-export const ZMemberJoinedMetadata = z.object({
-  communityId: z.string(),
-});
+export const ZMemberJoinedMetadata = z.object({});
 
 export type TMemberJoinedMetadata = z.infer<typeof ZMemberJoinedMetadata>;
 
-export const ZMemberLeftMetadata = z.object({
-  communityId: z.string(),
-});
+export const ZMemberLeftMetadata = z.object({});
 
 export type TMemberLeftMetadata = z.infer<typeof ZMemberLeftMetadata>;
 
 export const ZEngagementCompletedMetadata = z.object({
-  communityId: z.string(),
   engagementId: z.string(),
 });
 
@@ -38,7 +33,6 @@ export type TEngagementCompletedMetadata = z.infer<typeof ZEngagementCompletedMe
 
 export const ZEngagementCreatedMetadata = z.object({
   engagementId: z.string(),
-  title: z.string(),
   reward: z.any(),
 });
 
