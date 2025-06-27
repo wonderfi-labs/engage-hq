@@ -79,6 +79,8 @@ export const SurveysPage = async ({
   };
 
   let content;
+
+  //To test the mobile view, comment out the following block.
   if (isMobile) {
     content = (
       <>

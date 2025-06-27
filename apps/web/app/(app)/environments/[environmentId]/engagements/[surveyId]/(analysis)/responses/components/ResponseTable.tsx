@@ -36,6 +36,7 @@ import { TSurvey } from "@formbricks/types/surveys/types";
 import { TTag } from "@formbricks/types/tags";
 import { TUser } from "@formbricks/types/user";
 import { useBlockscoutApi } from "@formbricks/web3";
+import { ResponseTableMobile } from "./ResponseTableMobile";
 
 interface ResponseTableProps {
   data: TResponseTableData[];
@@ -200,85 +201,99 @@ export const ResponseTable = ({
 
   return (
     <div>
-      <DndContext
-        id="response-table"
-        collisionDetection={closestCenter}
-        modifiers={[restrictToHorizontalAxis]}
-        onDragEnd={handleDragEnd}
-        sensors={sensors}>
-        <DataTableToolbar
-          setIsExpanded={setIsExpanded}
-          setIsTableSettingsModalOpen={setIsTableSettingsModalOpen}
-          isExpanded={isExpanded ?? false}
-          table={table}
-          deleteRows={deleteResponses}
-          type="response"
-          deleteAction={deleteResponse}
-        />
-        <div className="w-fit max-w-full overflow-hidden overflow-x-auto rounded-xl border border-slate-200">
-          <div className="w-full overflow-x-auto">
-            <Table className="w-full" style={{ tableLayout: "fixed" }} id="response-table">
-              <TableHeader className="pointer-events-auto">
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    <SortableContext items={columnOrder} strategy={horizontalListSortingStrategy}>
-                      {headerGroup.headers.map((header) => (
-                        <DataTableHeader
-                          key={header.id}
-                          header={header}
-                          setIsTableSettingsModalOpen={setIsTableSettingsModalOpen}
-                        />
-                      ))}
-                    </SortableContext>
-                  </TableRow>
-                ))}
-              </TableHeader>
-
-              <TableBody ref={parent}>
-                {table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className={"group cursor-pointer"}>
-                    {row.getVisibleCells().map((cell) => (
-                      <ResponseTableCell
-                        key={cell.id}
-                        cell={cell}
-                        row={row}
-                        isExpanded={isExpanded ?? false}
-                        setSelectedResponseId={setSelectedResponseId}
-                        responses={responses}
-                      />
+      <div className="hidden md:block">
+        <DndContext
+          id="response-table"
+          collisionDetection={closestCenter}
+          modifiers={[restrictToHorizontalAxis]}
+          onDragEnd={handleDragEnd}
+          sensors={sensors}>
+          <DataTableToolbar
+            setIsExpanded={setIsExpanded}
+            setIsTableSettingsModalOpen={setIsTableSettingsModalOpen}
+            isExpanded={isExpanded ?? false}
+            table={table}
+            deleteRows={deleteResponses}
+            type="response"
+            deleteAction={deleteResponse}
+          />
+          <div className="hidden md:block">
+            <div className="w-fit max-w-full overflow-hidden overflow-x-auto rounded-xl border border-slate-200">
+              <div className="w-full overflow-x-auto">
+                <Table className="w-full" style={{ tableLayout: "fixed" }} id="response-table">
+                  <TableHeader className="pointer-events-auto">
+                    {table.getHeaderGroups().map((headerGroup) => (
+                      <TableRow key={headerGroup.id}>
+                        <SortableContext items={columnOrder} strategy={horizontalListSortingStrategy}>
+                          {headerGroup.headers.map((header) => (
+                            <DataTableHeader
+                              key={header.id}
+                              header={header}
+                              setIsTableSettingsModalOpen={setIsTableSettingsModalOpen}
+                            />
+                          ))}
+                        </SortableContext>
+                      </TableRow>
                     ))}
-                  </TableRow>
-                ))}
-                {table.getRowModel().rows.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                      {t("common.no_results")}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
+                  </TableHeader>
 
-        {data && hasMore && data.length > 0 && (
-          <div className="mt-4 flex justify-center">
-            <Button onClick={fetchNextPage}>{t("common.load_more")}</Button>
-          </div>
-        )}
+                  <TableBody ref={parent}>
+                    {table.getRowModel().rows.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && "selected"}
+                        className={"group cursor-pointer"}>
+                        {row.getVisibleCells().map((cell) => (
+                          <ResponseTableCell
+                            key={cell.id}
+                            cell={cell}
+                            row={row}
+                            isExpanded={isExpanded ?? false}
+                            setSelectedResponseId={setSelectedResponseId}
+                            responses={responses}
+                          />
+                        ))}
+                      </TableRow>
+                    ))}
+                    {table.getRowModel().rows.length === 0 && (
+                      <TableRow>
+                        <TableCell colSpan={columns.length} className="h-24 text-center">
+                          {t("common.no_results")}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
 
-        <DataTableSettingsModal
-          open={isTableSettingsModalOpen}
-          setOpen={setIsTableSettingsModalOpen}
+            {data && hasMore && data.length > 0 && (
+              <div className="mt-4 flex justify-center">
+                <Button onClick={fetchNextPage}>{t("common.load_more")}</Button>
+              </div>
+            )}
+
+            <DataTableSettingsModal
+              open={isTableSettingsModalOpen}
+              setOpen={setIsTableSettingsModalOpen}
+              survey={survey}
+              table={table}
+              columnOrder={columnOrder}
+              handleDragEnd={handleDragEnd}
+            />
+          </div>
+        </DndContext>
+      </div>
+      <div className="block md:hidden">
+        <ResponseTableMobile
+          data={tableData}
+          responses={responses}
+          isExpanded={isExpanded}
+          setSelectedResponseId={setSelectedResponseId}
+          responsesLength={data?.length || 0}
+          columns={tableColumns}
           survey={survey}
-          table={table}
-          columnOrder={columnOrder}
-          handleDragEnd={handleDragEnd}
         />
-
         {responses && (
           <ResponseCardModal
             balances={balances}
@@ -300,7 +315,7 @@ export const ResponseTable = ({
             }}
           />
         )}
-      </DndContext>
+      </div>
     </div>
   );
 };
