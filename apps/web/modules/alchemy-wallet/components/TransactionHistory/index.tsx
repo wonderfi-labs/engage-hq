@@ -82,7 +82,7 @@ interface TransactionCardContainerProps {
 export function TransactionCardContainer({ title, className = "", children }: TransactionCardContainerProps) {
   return (
     <div className="flex w-full flex-col items-center">
-      <div className="w-full p-4 md:w-2/3 md:p-0">
+      <div className="w-full md:w-2/3">
         <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
         <div
           className={cn(

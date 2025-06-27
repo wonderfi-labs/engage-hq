@@ -143,6 +143,9 @@ export const ZUserWhitelistInfo = z.object({
   surveysCompleted: z.number().optional(),
   createdAt: z.date().optional(),
   members: z.array(ZCommunityMember).optional(),
+  communityAvatarUrl: z.string().url().nullable(),
+  communityBannerUrl: z.string().url().nullable(),
+  communitySlug: z.string().nullable(),
 });
 
 export type TUserWhitelistInfo = z.infer<typeof ZUserWhitelistInfo>;

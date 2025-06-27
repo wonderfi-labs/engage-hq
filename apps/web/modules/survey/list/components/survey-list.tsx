@@ -15,6 +15,7 @@ import { MobileSurveyCard } from "./mobile-survey-card";
 import { SurveyCard } from "./survey-card";
 import { SurveyFilters } from "./survey-filters";
 import { SurveyLoading } from "./survey-loading";
+import { SurveyLoadingMobile } from "./survey-loading-mobile";
 
 interface SurveysListProps {
   environmentId: string;
@@ -134,6 +135,7 @@ export const SurveysList = ({
         surveyFilters={surveyFilters}
         setSurveyFilters={setSurveyFilters}
         currentProjectChannel={currentProjectChannel}
+        isMobile={isMobile}
       />
       {surveys.length > 0 ? (
         <div>
@@ -185,7 +187,11 @@ export const SurveysList = ({
       ) : (
         <div className="flex h-full w-full">
           {isFetching ? (
-            <SurveyLoading />
+            isMobile ? (
+              <SurveyLoadingMobile />
+            ) : (
+              <SurveyLoading />
+            )
           ) : (
             <div className="flex w-full flex-col items-center justify-center text-slate-600">
               <span className="h-24 w-24 p-4 text-center text-5xl">🕵️</span>

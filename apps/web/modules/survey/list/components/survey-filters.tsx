@@ -21,6 +21,7 @@ interface SurveyFilterProps {
   surveyFilters: TSurveyFilters;
   setSurveyFilters: React.Dispatch<React.SetStateAction<TSurveyFilters>>;
   currentProjectChannel: TProjectConfigChannel;
+  isMobile?: boolean;
 }
 
 const getStatusOptions = (t: TFnType): TFilterOption[] => [
@@ -52,6 +53,7 @@ const getSortOptions = (t: TFnType): TSortOption[] => [
 export const SurveyFilters = ({
   surveyFilters,
   setSurveyFilters,
+  isMobile = false,
   // currentProjectChannel,
 }: SurveyFilterProps) => {
   const { createdBy, sortBy, status, type } = surveyFilters;
@@ -99,6 +101,68 @@ export const SurveyFilters = ({
   const handleSortChange = (option: TSortOption) => {
     setSurveyFilters((prev) => ({ ...prev, sortBy: option.value }));
   };
+
+  if (isMobile) {
+    return (
+      <div className="flex flex-col gap-2 px-2">
+        <SearchBar
+          value={name}
+          onChange={setName}
+          placeholder={t("environments.surveys.search_by_survey_name")}
+          className="border-slate-700"
+        />
+        <div className="flex gap-2">
+          <SurveyFilterDropdown
+            title={t("common.status")}
+            id="status"
+            options={getStatusOptions(t)}
+            selectedOptions={status}
+            setSelectedOptions={handleStatusChange}
+            isOpen={dropdownOpenStates.get("status")}
+            toggleDropdown={toggleDropdown}
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="flex w-full items-center justify-between border border-slate-700"
+                size="sm">
+                <span>
+                  {t("common.sort_by")}:{" "}
+                  {getSortOptions(t).find((option) => option.value === sortBy)
+                    ? t(getSortOptions(t).find((option) => option.value === sortBy)?.label ?? "")
+                    : ""}
+                </span>
+                <ChevronDownIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="bg-slate-900">
+              {getSortOptions(t).map((option) => (
+                <SortOption
+                  option={option}
+                  key={option.label}
+                  sortBy={surveyFilters.sortBy}
+                  handleSortChange={handleSortChange}
+                />
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        {(createdBy.length > 0 || status.length > 0 || type.length > 0) && (
+          <Button
+            size="sm"
+            onClick={() => {
+              setSurveyFilters(initialFilters);
+              localStorage.removeItem("surveyFilters");
+            }}
+            className="w-full">
+            {t("common.clear_filters")}
+            <X />
+          </Button>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-between">

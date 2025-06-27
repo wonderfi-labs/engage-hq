@@ -134,6 +134,15 @@ export const updateCommunityAction = authenticatedActionClient
   });
 
 export async function findUniqueCommunitySlugAction(baseSlug: string, userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { communitySlug: true },
+  });
+
+  if (user?.communitySlug == baseSlug) {
+    return baseSlug;
+  }
+
   const existingSlugs = await prisma.user.findMany({
     where: {
       communitySlug: {

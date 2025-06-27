@@ -70,7 +70,7 @@ export function WalletTokenBalances({ balances, className }: WalletTokenBalances
       <div className="flex justify-center">
         <div
           className={cn(
-            "relative my-4 flex w-full flex-col gap-4 rounded-xl border border-slate-200 bg-white px-4 py-4 text-left shadow-sm md:w-2/3 md:flex-row",
+            "relative my-4 flex w-full flex-col gap-4 rounded-xl border border-slate-200 bg-white py-4 text-left shadow-sm md:w-2/3 md:flex-row",
             className
           )}>
           <div className="col-span-3 flex w-full flex-col gap-2">
@@ -120,7 +120,7 @@ export function WalletTokenBalances({ balances, className }: WalletTokenBalances
   }
 
   return (
-    <div className="flex justify-center p-4 md:p-0">
+    <div className="flex justify-center py-4 md:py-0">
       <div
         className={cn(
           "relative my-4 flex w-full flex-col gap-4 rounded-xl border border-slate-200 bg-white px-4 py-4 text-left shadow-sm md:w-2/3 md:flex-row",

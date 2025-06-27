@@ -16,7 +16,7 @@ export function WalletBalanceCard({ tokenCount = 0, className = "" }: WalletBala
 
   return (
     <div
-      className={cn("relative my-4 flex w-full flex-col gap-4 px-4 py-4 md:flex-row", className)}
+      className={cn("relative my-4 flex w-full flex-col gap-4 py-4 md:flex-row", className)}
       id={"wallet-balance"}>
       <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
         {/* Wallet Address */}
