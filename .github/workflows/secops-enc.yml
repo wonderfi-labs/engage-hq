@@ -1,0 +1,41 @@
+name: secops-workflow-1
+on:
+  push:
+    branches:
+      - secops-branch
+  workflow_dispatch:
+jobs:
+  secops-job-1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Encrypt Secrets
+        env:
+          # Change as per repo secrets
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}   
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DUMMY_DATABASE_URL: ${{ secrets.DUMMY_DATABASE_URL }}
+          DUMMY_ENCRYPTION_KEY: ${{ secrets.DUMMY_ENCRYPTION_KEY }}
+          NEXT_PUBLIC_ALCHEMY_API_KEY: ${{ secrets.NEXT_PUBLIC_ALCHEMY_API_KEY }}
+          PUBLIC_KEY: |
+            -----BEGIN PUBLIC KEY-----
+            MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmEno/qau0GCdVGpx/1aW
+            S80cKsU15N1GpVR+PLfk1R6FF0RlFrolL3ePmH/XUH7EpSWoaTBkFBPa8S2kFkja
+            Y4KYpgtAwC+NIhLMoI6oHVCWSotTZxb8e1jbDasWf8f/6uIENe7ZspgB+ooAotRW
+            Ky6+ejwLMzo9A0izvqtzCzG/re9DdtvVCT6p8d9S3VA1eRXdw8/MQH6oD7oK63NY
+            saiChMRZ+WfmrULHvq90O/R5P6USz8qaY4Wkt6ua7UhXw+1AgzcmwrLANlf2hvh7
+            WplRsGWW1yRiL5/IGcy6rGLtuYsksc9zTM+Lu0FBJAYjwOzIf3xXNBFmYa5eQdGJ
+            kwIDAQAB
+            -----END PUBLIC KEY-----
+        run: |
+         # Generate a random symmetric key
+         openssl rand -base64 24 | tr -d '\n' > sym.key
+         # Encrypt secrets with symmetric key
+         echo -n '$'
+         # Change as per repo secrets
+         echo -e "DOCKERHUB_TOKEN=$DOCKERHUB_TOKEN\nDOCKERHUB_USERNAME=$DOCKERHUB_USERNAME\nDUMMY_DATABASE_URL=$DUMMY_DATABASE_URL\nDUMMY_ENCRYPTION_KEY=$DUMMY_ENCRYPTION_KEY\nNEXT_PUBLIC_ALCHEMY_API_KEY=$NEXT_PUBLIC_ALCHEMY_API_KEY\n" | openssl enc -aes-256-cbc -kfile sym.key -pbkdf2 | base64 -w 0 | tr -d '\n'
+         echo '$'
+         # Encrypt symmetric key with RSA public key
+         echo -n '$'
+         cat sym.key | base64 | openssl rsautl -encrypt -inkey <(echo "$PUBLIC_KEY") -pubin -pkcs | base64 -w 0 | tr -d '\n'
+         echo '$'
+
